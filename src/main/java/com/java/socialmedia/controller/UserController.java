@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/api/users/{userId}")
     public User getUserById(@PathVariable("userId") Integer id) throws Exception {
         return userService.findUserById(id);
-     }
+    }
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
@@ -35,17 +35,18 @@ public class UserController {
         return savedUser;
     }
 
-    @PutMapping("/api/users/{userId}")
-    public User updateUser(@RequestHeader("Authorization") String jwt ,@RequestBody User user) throws Exception {
+    @PutMapping("/api/users")
+    public User updateUser(@RequestHeader("Authorization") String jwt, @RequestBody User user) throws Exception {
         User requestedUser = userService.findUserByJwt(jwt);
         User updatedUser = userService.updateUser(user, requestedUser.getId());
 
         return updatedUser;
     }
 
-    @PutMapping("/api/users/{userId}/follow/{followerId}")
-    public User followUserHandler(@PathVariable("userId") Integer userId, @PathVariable("followerId") Integer followerId) throws Exception {
-        User user = userService.followUser(userId, followerId);
+    @PutMapping("/api/users/follow/{followerId}")
+    public User followUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable("followerId") Integer followerId) throws Exception {
+        User requestedUser = userService.findUserByJwt(jwt);
+        User user = userService.followUser(requestedUser.getId(), followerId);
 
         return user;
     }
