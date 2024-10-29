@@ -1,4 +1,4 @@
-package com.java.socialmedia.service;
+package com.java.socialmedia.service.impl;
 
 import com.java.socialmedia.models.User;
 import com.java.socialmedia.repository.UserRepository;

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImplementation implements CommentService {
     private PostService postService;
     private UserService userService;
     private CommentRepository commentRepository;

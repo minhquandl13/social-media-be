@@ -1,0 +1,15 @@
+package com.java.socialmedia.service;
+
+import com.java.socialmedia.models.Reels;
+import com.java.socialmedia.models.User;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+public interface ReelsService {
+    Reels createReel(Reels reel, User user);
+
+    List<Reels> findAllReels();
+
+    List<Reels> findUserReels(Integer userId) throws Exception;
+}
