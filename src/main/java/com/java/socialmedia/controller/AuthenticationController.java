@@ -5,7 +5,7 @@ import com.java.socialmedia.models.User;
 import com.java.socialmedia.repository.UserRepository;
 import com.java.socialmedia.request.LoginRequest;
 import com.java.socialmedia.response.AuthResponse;
-import com.java.socialmedia.service.CustomerUserDetailService;
+import com.java.socialmedia.service.impl.CustomerUserDetailService;
 import com.java.socialmedia.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
