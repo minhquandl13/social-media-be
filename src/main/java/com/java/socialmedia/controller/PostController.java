@@ -1,8 +1,10 @@
 package com.java.socialmedia.controller;
 
 import com.java.socialmedia.models.Post;
+import com.java.socialmedia.models.User;
 import com.java.socialmedia.response.ApiResponse;
 import com.java.socialmedia.service.PostService;
+import com.java.socialmedia.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,57 +16,62 @@ import java.util.List;
 @AllArgsConstructor
 public class PostController {
     private PostService postService;
+    private UserService userService;
 
-    @PostMapping("/posts/user/{userId}")
-    public ResponseEntity<Post> createPost(@RequestBody Post post,
-                                           @PathVariable Integer userId) throws Exception {
-        Post createdPost = postService.createNewPost(post, userId);
+    @PostMapping("/api/posts")
+    public ResponseEntity<Post> createPost(@RequestHeader("Authorization") String jwt,
+                                           @RequestBody Post post) throws Exception {
+        User requestedUser = userService.findUserByJwt(jwt);
+        Post createdPost = postService.createNewPost(post, requestedUser.getId());
 
         return new ResponseEntity<>(createdPost, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/posts/{postId}/user/{userId}")
+    @DeleteMapping("/api/posts/{postId}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId,
-                                                  @PathVariable Integer userId) throws Exception {
-        String message = postService.deletePost(postId, userId);
+                                                  @RequestHeader("Authorization") String jwt) throws Exception {
+        User requestedUser = userService.findUserByJwt(jwt);
+        String message = postService.deletePost(postId, requestedUser.getId());
         ApiResponse response = new ApiResponse(message, true);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/api/posts/{postId}")
     public ResponseEntity<Post> findPostById(@PathVariable Integer postId) throws Exception {
         Post post = postService.findPostById(postId);
 
         return new ResponseEntity<>(post, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/posts/user/{userId}")
+    @GetMapping("/api/posts/user/{userId}")
     public ResponseEntity<List<Post>> findUsersPosts(@PathVariable Integer userId) {
         List<Post> posts = postService.findPostByUserId(userId);
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/api/posts")
     public ResponseEntity<List<Post>> findAllPosts() {
         List<Post> posts = postService.findAllPosts();
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    @PutMapping("/posts/save/{postId}/user/{userId}")
+    @PutMapping("/api/posts/save/{postId}")
     public ResponseEntity<Post> savedPostHandler(@PathVariable Integer postId,
-                                                 @PathVariable Integer userId) throws Exception {
-        Post savedPost = postService.savedPost(postId, userId);
+                                                 @RequestHeader("Authorization") String jwt) throws Exception {
+        User requestedUser = userService.findUserByJwt(jwt);
+        Post savedPost = postService.savedPost(postId, requestedUser.getId());
 
         return new ResponseEntity<>(savedPost, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/posts/like/{postId}/user/{userId}")
+    @PutMapping("/api/posts/like/{postId}")
     public ResponseEntity<Post> likePostHandler(@PathVariable Integer postId,
-                                               @PathVariable Integer userId) throws Exception {
-        Post likedPost = postService.likePost(postId, userId);
+                                                @RequestHeader("Authorization") String jwt) throws Exception {
+        User requestedUser = userService.findUserByJwt(jwt);
+        Post likedPost = postService.likePost(postId, requestedUser.getId());
 
         return new ResponseEntity<>(likedPost, HttpStatus.ACCEPTED);
     }
