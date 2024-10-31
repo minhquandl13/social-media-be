@@ -1,6 +1,7 @@
 package com.java.social_media.service.impl;
 
 import com.java.social_media.config.JwtProvider;
+import com.java.social_media.exceptions.UserException;
 import com.java.social_media.models.User;
 import com.java.social_media.repository.UserRepository;
 import com.java.social_media.service.UserService;
@@ -29,14 +30,14 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User findUserById(Integer userId) throws Exception {
+    public User findUserById(Integer userId) throws UserException {
         Optional<User> user = userRepository.findById(userId);
 
         if (user.isPresent()) {
             return user.get();
         }
 
-        throw new Exception("User not exist with id " + userId);
+        throw new UserException("User not exist with id " + userId);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User followUser(Integer requestUser, Integer followerId) throws Exception {
+    public User followUser(Integer requestUser, Integer followerId) throws UserException {
         User reqUser = findUserById(requestUser);
         User follower = findUserById(followerId);
 
@@ -65,9 +66,9 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User updateUser(User newUserDetails, Integer id) throws Exception {
+    public User updateUser(User newUserDetails, Integer id) throws UserException {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new Exception("User does not exist with id " + id));
+                .orElseThrow(() -> new UserException("User does not exist with id " + id));
 
         // Update fields if they are not null
         if (newUserDetails.getFirstName() != null) {

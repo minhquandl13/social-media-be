@@ -1,5 +1,6 @@
 package com.java.social_media.controller;
 
+import com.java.social_media.exceptions.UserException;
 import com.java.social_media.models.User;
 import com.java.social_media.repository.UserRepository;
 import com.java.social_media.service.UserService;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{userId}")
-    public User getUserById(@PathVariable("userId") Integer id) throws Exception {
+    public User getUserById(@PathVariable("userId") Integer id) throws UserException {
         return userService.findUserById(id);
     }
 
@@ -36,7 +37,8 @@ public class UserController {
     }
 
     @PutMapping("/api/users")
-    public User updateUser(@RequestHeader("Authorization") String jwt, @RequestBody User user) throws Exception {
+    public User updateUser(@RequestHeader("Authorization") String jwt,
+                           @RequestBody User user) throws UserException {
         User requestedUser = userService.findUserByJwt(jwt);
         User updatedUser = userService.updateUser(user, requestedUser.getId());
 
@@ -44,7 +46,9 @@ public class UserController {
     }
 
     @PutMapping("/api/users/follow/{followerId}")
-    public User followUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable("followerId") Integer followerId) throws Exception {
+    public User followUserHandler(@RequestHeader("Authorization") String jwt,
+                                  @PathVariable("followerId") Integer followerId)
+            throws UserException {
         User requestedUser = userService.findUserByJwt(jwt);
         User user = userService.followUser(requestedUser.getId(), followerId);
 
@@ -61,7 +65,6 @@ public class UserController {
     @GetMapping("/api/users/profile")
     public User getUserFromToken(@RequestHeader("Authorization") String jwt) {
         User user = userService.findUserByJwt(jwt);
-
         user.setPassword(null);
 
         return user;
