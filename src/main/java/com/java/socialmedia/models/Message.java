@@ -1,5 +1,6 @@
 package com.java.socialmedia.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,21 +14,22 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Chat {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String chat_name;
+    private String content;
 
-    private String chat_image;
+    private String image;
 
-    @ManyToMany
-    private List<User> users = new ArrayList<>();
+    @ManyToOne
+    private User user;
 
-    @OneToMany(mappedBy = "chat")
-    private List<Message> messages = new ArrayList<>();
+    @JsonIgnore
+    @ManyToOne
+    private Chat chat;
 
     private LocalDateTime timestamp;
 }
