@@ -100,4 +100,10 @@ public class UserServiceImplementation implements UserService {
 
         return user;
     }
+
+    @Override
+    public User findUserByUuid(String uuid) throws Exception {
+        return userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new Exception("User not found with uuid: " + uuid));
+    }
 }

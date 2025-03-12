@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class CreateMessage {
+public class MessageController {
     private MessageService messageService;
     private UserService userService;
 

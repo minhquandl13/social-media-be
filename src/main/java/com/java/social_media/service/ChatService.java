@@ -11,4 +11,10 @@ public interface ChatService {
     Chat findChatById(Integer chatId) throws Exception;
 
     List<Chat> findUsersChats(Integer userId);
+
+    Chat createChatWithUuid(User reqUser, User targetUser);
+
+    Chat findChatByUuid(String uuid) throws Exception;
+
+    List<Chat> findUsersChatsByUserUuid(String userUuid);
 }
